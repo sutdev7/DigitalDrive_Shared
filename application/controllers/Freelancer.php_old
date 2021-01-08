@@ -1,0 +1,433 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+
+
+class Freelancer extends CI_Controller {
+
+
+
+	function __construct() {
+
+      	parent::__construct();
+
+
+
+		header('Cache-Control: no-cache, must-revalidate, max-age=0');
+
+		header('Cache-Control: post-check=0, pre-check=0',false);
+
+		header('Pragma: no-cache');
+
+
+
+		$this->load->library('Lfreelancer');
+
+		if(!$this->auth->is_logged()) {
+
+        	$this->session->set_flashdata('msg', '<div class="alert alert-info text-center">You haven\'t login to the portal. Please login to proceed further.</div>');
+
+        	redirect('sign-in', 'refresh');
+
+
+
+        }
+
+    }
+
+
+
+	public function index(){
+
+		
+
+		$content = $this->lfreelancer->dashboard_page();
+
+		$data = array(
+
+			'content' => $content,
+
+			'title' => display('Dashboard :: Hire-n-Work'),
+
+		);
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+	
+
+	public function key_list(){
+
+		
+
+		$content = $this->lfreelancer->key_list();
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('Key List :: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+	
+
+	public function freelancer_job_details(){
+
+		$task_id = $this->uri->segment(2);
+
+		
+
+		$content = $this->lfreelancer->freelancer_job_details($task_id);
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('Freelancer Job Details :: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+	
+
+	public function save_job(){
+
+		$task_user_id = $_POST['taskId']; 
+
+		$this->lfreelancer->ajax_save_job($task_user_id);
+
+	}
+
+	
+
+	public function save_job_list(){
+
+		$content = $this->lfreelancer->saved_job_list();
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('Freelancer Job List :: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+	
+
+	public function proposal(){
+
+		
+
+		$content = $this->lfreelancer->freelancer_proposal();
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('Freelancer Proposal :: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_freelancer_html_view($data);
+
+		
+
+	}
+
+	public function submit_proposal(){
+
+			
+
+		$this->form_validation->set_rules('terms_amount_max','Bid Amount', 'required');
+
+		
+
+		$submitData = $this->input->post();        
+
+		 
+
+		if($this->form_validation->run() == false){ 
+
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger text-center">Bid amount should not be empty.</div>');
+
+			redirect('job-details/'.$this->input->post('user_task_id'),'refresh'); 
+
+		}else{
+			$r = $this->lfreelancer->proposal_already_added();
+			if($r['is_added']) {
+				$this->session->set_flashdata('msg', '<div class="alert alert-danger text-center">You are already sended the proposal.</div>');
+				redirect('job-details/'.$this->input->post('user_task_id'),'refresh'); 				
+			} else {
+				$this->lfreelancer->submit_proposal();
+				redirect('key-list','refresh');
+			}
+
+		}
+
+	}
+
+	
+
+	public function public_profile(){
+
+		$user_id = $this->uri->segment(2);
+
+		if($user_id == ''){
+
+			$user_id = $this->session->userdata('user_id');
+
+		}
+
+		$content = $this->lfreelancer->public_profile($user_id);
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('My Jobs :: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+		
+
+	public function earnings(){
+
+		$content = $this->lfreelancer->earnings();
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('Key List :: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+	
+
+	public function analytics(){
+
+		$content = $this->lfreelancer->analytics();
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('Analytics :: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+	
+
+	public function problem_ticket(){
+
+		$content = $this->lfreelancer->problem_ticket();
+
+		
+
+		$data = array(
+
+			'content' => $content,
+
+			'title' => display('Problem Ticket :: Hire-n-Work'),
+
+		);		
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+	
+
+	public function save_problem_ticket(){
+
+		$this->form_validation->set_rules('grievance_id','Issue Type', 'required');
+
+        $this->form_validation->set_rules('grievance_content','Description','required');       
+
+
+
+        if($this->form_validation->run() == false){ 
+
+			$this->lfreelancer->add_ticket($this->session->all_userdata());
+
+		}
+
+		$this->session->set_flashdata('msg', '<div class="alert alert-success text-center">Problem ticket has been added successfully</div>');
+
+		redirect('problem-ticket', 'refresh');
+
+	}
+
+	public function job_list(){
+
+		$type = $this->uri->segment(2); 
+
+		
+
+		$content = $this->lfreelancer->job_list_data($type);
+
+		
+
+		$data = array(
+
+			'content' => $content,
+
+			'title' => display('Job List :: Hire-n-Work'),
+
+		);		
+
+		$this->template->full_freelancer_html_view($data);
+
+		
+
+	}
+
+	
+
+	public function offer_jobs(){
+
+		$type = 'offer'; 
+
+		
+
+		$content = $this->lfreelancer->job_list_data($type);
+
+		
+
+		$data = array(
+
+			'content' => $content,
+
+			'title' => display('Job List :: Hire-n-Work'),
+
+		);		
+
+		$this->template->full_freelancer_html_view($data);
+
+		
+
+	}
+
+	
+
+	public function hired_job_details(){
+
+		$task_id = $this->uri->segment(2);
+
+		
+
+		$content = $this->lfreelancer->hired_job_details($task_id);
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('Hired Job Details :: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+	
+
+	public function freelancer_direct_action(){
+
+		$data['task_id'] = $this->uri->segment(2);
+
+		$data['action_type'] = $this->uri->segment(4);
+
+				
+
+		$this->lfreelancer->freelancer_direct_action($data);
+
+	}
+
+	
+
+	
+
+	public function freelancer_take_action(){
+
+		$data['task_id'] = $this->uri->segment(2);
+
+		$data['action_type'] = $this->uri->segment(3);
+
+				
+
+		$this->lfreelancer->freelancer_take_action($data);
+
+	}
+
+	
+
+	
+
+	public function close_contract(){ 
+
+		$content = $this->lfreelancer->close_contract_page($this->uri->segment(2));
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('Complete Task:: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_customer_html_view($data);
+
+	}
+
+	
+
+	public function see_all_projects()
+
+	{
+
+		$post_request = $this->input->post();
+
+		$content = $this->lfreelancer->analytics_details($post_request);
+
+		$data = array(
+
+					'content' => $content,
+
+					'title' => display('Analytics Details :: Hire-n-Work'),
+
+				);		
+
+		$this->template->full_freelancer_html_view($data);
+
+	}
+
+	
+
+}
