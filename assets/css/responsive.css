@@ -1,0 +1,63 @@
+
+
+@media (min-width: 576px){
+.modal-dialog {
+    max-width: 690px !important;
+    margin: 1.75rem auto;
+  }
+}
+
+
+@media only screen and (max-width: 991px) {
+	.job-name-content h2 {
+		max-width: 80%;
+		line-height: 1.5;
+	}
+
+	.job-name-content .line-3 {
+		max-width: 85%;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	.banner-content .right-col .salary {
+		padding: 15px 25px;
+	}
+
+	.banner-content .right-col .salary h4 {
+		font-size: 22px;
+		margin-bottom: 6px; 
+	}
+
+	.banner-content .right-col .salary h3 {
+		font-size: 26px;
+	}
+}
+
+@media only screen and (max-width: 414px) {
+	.banner {
+		background-size: 1100px;
+		background-position: top;
+	}
+
+	.banner-content {
+		justify-content: center;
+		padding: 30px 0 0;
+	}
+
+	.banner-content .left-col {
+		margin-bottom: 30px;
+	}
+
+	.banner-content .banner-text h2 {
+		margin-bottom: 5px;
+	}
+
+	.job-detail-content {
+		margin-bottom: 40px;
+	}
+
+	.job-name-content .line-3 span {
+		display: block;
+	}
+}
