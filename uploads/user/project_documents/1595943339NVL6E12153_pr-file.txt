@@ -1,0 +1,50 @@
+http://www.drivedigitally.com/hirenwork/sign-in
+freelancer
+-----------
+rojarraid@gmail.com 
+123456 
+
+client
+----------
+anujazz381@gmail.com
+123456789
+
+admin
+--------- 
+admin@hirenwork.com
+Admin@123 
+
+https://www.drivedigitally.com/hirenwork/managedbadmin.php
+'hostname' => 'localhost',
+'username' => 'drivedigitally_hirenwork',
+'password' => ']2oSXC*gP)B0',
+'database' => 'drivedigitally_hirenwork',
+
+
+drivedigitally.com
+hirenwork@drivedigitally.com
+%beg-7.*OoKM
+
+freelancer
+theunionatlyndhurst0@gmail.com 
+123456789
+
+kreozotum 200
+1 drop two time
+
+plantago Q 
+
+
+
+Ftp:
+drivedigitally.com
+hwhavenew@drivedigitally.com
+mPkx6?_bhfG!
+
+Database
+'hostname' => 'localhost',
+'username' => 'drivedigitally_hwhavenew',
+'password' => 'Tl)0;Lw4T-lB',
+'database' => 'drivedigitally_hwhavenew',
+
+http://drivedigitally.com/hwhavenew/checkdbadmin.php
